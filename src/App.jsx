@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useWebhook } from "./hooks/useWebhook";
 import Header from "./components/Header";
 import StatsBar from "./components/StatsBar";
 import SearchBar from "./components/SearchBar";
@@ -6,6 +7,7 @@ import PipelineBoard from "./components/PipelineBoard";
 import CandidateModal from "./components/CandidateModal";
 
 const App = () => {
+  useWebhook();
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
