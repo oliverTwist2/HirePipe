@@ -1,4 +1,5 @@
 {
+  "homepage": "https://github.com/oliverTwist2/HirePipe",
   "name": "hirepipe",
   "private": true,
   "version": "1.0.0",
@@ -7,7 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "server": "node server.js"
+    "server": "node server.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "express": "^5.2.1",

@@ -5,7 +5,8 @@ export function useWebhook() {
   const addCandidate = useCandidateStore((state) => state.addCandidate);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:3001");
+    const wsUrl = import.meta.env.VITE_WEBHOOK_WS_URL || "ws://localhost:3001";
+    const ws = new WebSocket(wsUrl);
 
     ws.onmessage = (event) => {
       const payload = JSON.parse(event.data);
