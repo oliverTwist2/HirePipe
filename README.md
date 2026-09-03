@@ -51,6 +51,35 @@ Open the local URL output in your terminal (typically `http://localhost:5173`).
 
 You can push candidate payloads directly to `http://localhost:3001/webhook`. Candidates will automatically appear in the `Applied` stage in real-time.
 
+### Production Test
+
+Use the live Render backend to test production webhook delivery:
+
+- Backend URL: `https://hirepipe.onrender.com`
+- Webhook endpoint: `https://hirepipe.onrender.com/webhook`
+
+Example payload:
+```json
+{
+  "name": "Alex Morgan",
+  "email": "alex.morgan@example.com",
+  "role": "Frontend Developer",
+  "notes": "Sourced via GitHub Pages test"
+}
+```
+
+Example request:
+```bash
+curl -X POST https://hirepipe.onrender.com/webhook \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Alex Morgan",
+    "email": "alex.morgan@example.com",
+    "role": "Frontend Developer",
+    "notes": "Sourced via GitHub Pages test"
+  }'
+```
+
 #### Single Candidate Request
 ```bash
 curl -X POST http://localhost:3001/webhook \
