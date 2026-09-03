@@ -1,28 +1,25 @@
 import React from "react";
 import useCandidateStore from "../store/useCandidateStore";
-import { STAGES, TERMINAL_STAGES } from "../constants/stages";
+import { TERMINAL_STAGES } from "../constants/stages";
 
 const CandidateCard = ({ candidate, onOpen }) => {
-  const moveStage = useCandidateStore((state) => state.moveStage);
+  const passCandidate = useCandidateStore((state) => state.passCandidate);
+  const failCandidate = useCandidateStore((state) => state.failCandidate);
 
   const isTerminal = TERMINAL_STAGES.includes(candidate.stage);
-  const currentIndex = STAGES.indexOf(candidate.stage);
-
-  const canMoveLeft = !isTerminal && currentIndex > 0;
-  const canMoveRight = !isTerminal && currentIndex < STAGES.length - 1;
 
   const handleCardClick = () => {
     onOpen(candidate);
   };
 
-  const handleMoveLeft = (event) => {
+  const handlePass = (event) => {
     event.stopPropagation();
-    moveStage(candidate.id, -1);
+    passCandidate(candidate.id);
   };
 
-  const handleMoveRight = (event) => {
+  const handleFail = (event) => {
     event.stopPropagation();
-    moveStage(candidate.id, 1);
+    failCandidate(candidate.id);
   };
 
   const renderStars = () => {
@@ -66,38 +63,34 @@ const CandidateCard = ({ candidate, onOpen }) => {
           )}
         </div>
         <p className="text-xs text-slate-300 mt-0.5">{candidate.role}</p>
+        {candidate.stage === "Rejected" && candidate.failedAtStage && (
+          <p className="text-xs text-rose-400 font-medium mt-1.5">
+            Failed at: {candidate.failedAtStage}
+          </p>
+        )}
       </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-slate-700/40">
         <div>{renderStars()}</div>
 
         {!isTerminal && (
-          <div className="flex items-center gap-1">
-            {canMoveLeft && (
-              <button
-                type="button"
-                onClick={handleMoveLeft}
-                title={`Move left to ${STAGES[currentIndex - 1]}`}
-                className="p-1 rounded bg-slate-700/60 hover:bg-indigo-600 text-slate-300 hover:text-white transition-colors"
-              >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-            )}
-
-            {canMoveRight && (
-              <button
-                type="button"
-                onClick={handleMoveRight}
-                title={`Move right to ${STAGES[currentIndex + 1]}`}
-                className="p-1 rounded bg-slate-700/60 hover:bg-indigo-600 text-slate-300 hover:text-white transition-colors"
-              >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            )}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handleFail}
+              title="Fail candidate"
+              className="px-2 py-1 text-xs font-medium rounded-md bg-rose-500/10 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/20 transition-colors"
+            >
+              Fail
+            </button>
+            <button
+              type="button"
+              onClick={handlePass}
+              title="Pass candidate to next stage"
+              className="px-2.5 py-1 text-xs font-medium rounded-md bg-emerald-600 hover:bg-emerald-500 text-white transition-colors shadow-sm"
+            >
+              Pass
+            </button>
           </div>
         )}
       </div>
