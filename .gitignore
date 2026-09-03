@@ -1,2 +1,16 @@
 node_modules
 context.md
+
+# Build output
+dist
+
+# Environment variables
+.env
+.env.local
+
+# Vite local overrides
+*.local
+
+# OS metadata
+.DS_Store
+Thumbs.db
