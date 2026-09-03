@@ -84,6 +84,7 @@ const INITIAL_CANDIDATES = [
     email: "jwilson@example.com",
     role: "QA Automation Lead",
     stage: "Rejected",
+    failedAtStage: "Interview",
     rating: 2,
     notes: "Looking for more hands-on Playwright experience than presented.",
     dateAdded: "2026-08-18T10:00:00Z",
@@ -107,6 +108,7 @@ const useCandidateStore = create(
           id: crypto.randomUUID(),
           dateAdded: new Date().toISOString(),
           stage: "Applied",
+          failedAtStage: null,
           rating: null,
           notes: "",
           stageHistory: [{ stage: "Applied", timestamp: new Date().toISOString() }],
@@ -123,22 +125,39 @@ const useCandidateStore = create(
         }));
       },
 
-      moveStage: (id, direction) => {
+      passCandidate: (id) => {
         const { candidates } = get();
         const candidate = candidates.find((c) => c.id === id);
         if (!candidate) return;
 
-        const currentIndex = STAGES.indexOf(candidate.stage);
-        const nextIndex = currentIndex + direction;
-        if (nextIndex < 0 || nextIndex >= STAGES.length) return;
-
-        const nextStage = STAGES[nextIndex];
+        const nextStage = candidate.stage === "Offer" ? "Accepted" : STAGES[STAGES.indexOf(candidate.stage) + 1];
         const historyEntry = { stage: nextStage, timestamp: new Date().toISOString() };
 
         set((state) => ({
           candidates: state.candidates.map((c) =>
             c.id === id
               ? { ...c, stage: nextStage, stageHistory: [...c.stageHistory, historyEntry] }
+              : c
+          ),
+        }));
+      },
+
+      failCandidate: (id) => {
+        const { candidates } = get();
+        const candidate = candidates.find((c) => c.id === id);
+        if (!candidate) return;
+
+        const historyEntry = { stage: "Rejected", timestamp: new Date().toISOString() };
+
+        set((state) => ({
+          candidates: state.candidates.map((c) =>
+            c.id === id
+              ? {
+                  ...c,
+                  stage: "Rejected",
+                  failedAtStage: candidate.stage,
+                  stageHistory: [...c.stageHistory, historyEntry],
+                }
               : c
           ),
         }));
