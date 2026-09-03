@@ -10,7 +10,7 @@ const Header = ({ onOpenModal }) => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-indigo-600/30">
-            H
+            HP
           </div>
           <div>
             <h1 className="text-xl font-bold text-white tracking-tight">HirePipe</h1>
